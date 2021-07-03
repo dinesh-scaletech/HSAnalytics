@@ -43,8 +43,8 @@ afterEvaluate {
                 // The coordinates of the library, being set from variables that
                 // we'll set up later
                 groupId 'io.github.dinesh-scaletech'
-                artifactId 'HSAnalytic'
-                version '0.0.1'
+                artifactId 'UpAxis'
+                version '0.0.3'
 
                 // Two artifacts, the `aar` (or `jar`) and the sources
                 if (project.plugins.findPlugin("com.android.library")) {
@@ -57,8 +57,8 @@ afterEvaluate {
                 artifact javadocJar
 
                 pom {
-                    name = 'HSAnalytic'
-                    description = 'HSAnalytic lib to track user business action in background'
+                    name = 'UpAxis'
+                    description = 'UpAxis sdk to track user business action in background'
                     url = 'https ://github.com/dinesh-scaletech/HSAnalytics/'
                     licenses {
                         license {
