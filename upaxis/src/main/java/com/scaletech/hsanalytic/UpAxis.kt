@@ -9,8 +9,8 @@ import com.scaletech.hsanalytic.utils.PARAM_DUPLICATE
 import com.scaletech.hsanalytic.utils.PARAM_K
 import retrofit2.Call
 import retrofit2.Response
-
 public class UpAxis {
+    @JvmSuppressWildcards
     fun trackUser() {
         val apiInterface: ApiInterface? = ApiProvider.createServiceString()
         val queryParams = HashMap<String, Any?>()
