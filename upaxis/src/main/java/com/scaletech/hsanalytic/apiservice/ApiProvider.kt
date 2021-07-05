@@ -11,15 +11,32 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
 public class ApiProvider {
+    private val BASE_URL: String = "https://dev.trcked.me/"
+    companion object {
+        private val provider = ApiProvider()
 
-    private  val BASE_URL:String = "https://dev.trcked.me/"
+        fun createService(): ApiInterface? {
+            return provider.retrofit?.create(ApiInterface::class.java)
+        }
+
+        fun  createServiceString(): ApiInterface? {
+            return provider.retrofitString?.create(ApiInterface::class.java)
+        }
+
+        fun  createServiceDynamic(): ApiInterface? {
+            return provider.retrofitDynamicUrl?.create(ApiInterface::class.java)
+        }
+
+    }
+
+
     /**
      * Method to return retrofit instance. This method will retrofit retrofit instance with app api Base url.
      *
      * @return instance of ad retrofit.
      */
     private var retrofit: Retrofit? = null
-        private get() = if (field != null) {
+        get() = if (field != null) {
             field
         } else {
             val gson: Gson = GsonBuilder()
@@ -52,11 +69,13 @@ public class ApiProvider {
     private var retrofitDynamic: Retrofit? = null
     private var okHttpClientDynamic: OkHttpClient? = null
     private var okHttpClient: OkHttpClient? = null
-    private val loggingInterceptor: HttpLoggingInterceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { message: String? -> {
-        message?.let { Log.e("response", it) }
-    } }).setLevel(HttpLoggingInterceptor.Level.BODY)
+    private val loggingInterceptor: HttpLoggingInterceptor = HttpLoggingInterceptor { message: String? ->
+        run {
+            message?.let { Log.e("response", it) }
+        }
+    }.setLevel(HttpLoggingInterceptor.Level.BODY)
     private val httpClient: OkHttpClient?
-        private get() {
+        get() {
             if (okHttpClient == null) {
                 okHttpClient = OkHttpClient.Builder()
                     .connectTimeout(1, TimeUnit.MINUTES)
@@ -67,7 +86,7 @@ public class ApiProvider {
             return okHttpClient
         }
     private val httpClientDynamic: OkHttpClient?
-        private get() {
+        get() {
             if (okHttpClientDynamic == null) {
                 okHttpClientDynamic = OkHttpClient.Builder()
                     .connectTimeout(3, TimeUnit.MINUTES)
@@ -84,7 +103,7 @@ public class ApiProvider {
      * @return instance of ad retrofit.
      */
     private val retrofitDynamicUrl: Retrofit?
-        private get() = if (retrofitDynamic != null) {
+        get() = if (retrofitDynamic != null) {
             retrofitDynamic
         } else {
             retrofitDynamic = Retrofit.Builder()
@@ -94,15 +113,5 @@ public class ApiProvider {
             retrofitDynamic
         }
 
-    fun <S> createService(serviceClass: Class<S>?): S? {
-        return retrofit?.create(serviceClass)
-    }
 
-    fun <S> createServiceString(serviceClass: Class<S>?): S? {
-        return retrofitString?.create(serviceClass)
-    }
-
-    fun <S> createServiceDynamic(serviceClass: Class<S>?): S? {
-        return retrofitDynamicUrl?.create(serviceClass)
-    }
 }
