@@ -1,6 +1,5 @@
 package com.scaletech.hsanalytic
 
-import android.content.Context
 import android.util.Log
 import com.scaletech.hsanalytic.apiservice.ApiInterface
 import com.scaletech.hsanalytic.apiservice.ApiProvider
@@ -9,14 +8,18 @@ import com.scaletech.hsanalytic.utils.PARAM_DUPLICATE
 import com.scaletech.hsanalytic.utils.PARAM_K
 import retrofit2.Call
 import retrofit2.Response
+
 public class UpAxis {
+    /**
+     * Method to track user action and provide info based on user information.
+     */
     @JvmSuppressWildcards
-    fun trackUser() {
+    fun trackUser(k: String, clickId: String, allowDuplicate: Boolean = false) {
         val apiInterface: ApiInterface? = ApiProvider.createServiceString()
         val queryParams = HashMap<String, Any?>()
-        queryParams[PARAM_K] = "xPGSZ2mMVFsHGQSpg8yk"
-        queryParams[PARAM_CLICK_ID] = "17a2ea730f042d5d9aa5bf9b8"
-        queryParams[PARAM_DUPLICATE] = 1
+        queryParams[PARAM_K] = k
+        queryParams[PARAM_CLICK_ID] = clickId
+        queryParams[PARAM_DUPLICATE] = if (allowDuplicate) 1 else 0
         val call = apiInterface?.trackRequest(queryParams)
         call?.enqueue(object : retrofit2.Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
