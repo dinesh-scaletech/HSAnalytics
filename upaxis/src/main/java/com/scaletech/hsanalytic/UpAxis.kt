@@ -44,7 +44,7 @@ public class UpAxis(private val baseUrl: String, private val authId: String) {
      * Method to track user action and provide info based on user information.
      */
     @JvmSuppressWildcards
-    public fun eventCaptured(clickId: String,eventId: String) {
+    public fun eventCaptured(clickId: String, eventId: String) {
         val apiInterface: ApiInterface? = ApiProvider.createServiceString(baseUrl)
         val queryParams = HashMap<String, Any?>()
         queryParams[PARAM_K] = authId
@@ -72,11 +72,13 @@ public class UpAxis(private val baseUrl: String, private val authId: String) {
      * Method to track user action and provide info based on user information.
      */
     @JvmSuppressWildcards
-    public fun sendExtraData(eventId: String, appType: String?) {
+    public fun sendExtraData(eventId: String,clickId: String, appType: String?) {
         val apiInterface: ApiInterface? = ApiProvider.createServiceString(baseUrl)
         val queryParams = HashMap<String, Any?>()
         queryParams[PARAM_K] = authId
         queryParams[PARAM_EVENT_ID] = eventId
+        queryParams[PARAM_CLICK_ID] = clickId
+        queryParams[PARAM_DUPLICATE] = 1
         queryParams[PARAM_DETAILS] = getDeviceData(appType)
         val call = apiInterface?.trackRequest(queryParams)
         call?.enqueue(object : retrofit2.Callback<String> {
@@ -95,18 +97,18 @@ public class UpAxis(private val baseUrl: String, private val authId: String) {
     }
 
     class Builder {
-        companion object {
-            inline fun build(builder: Builder.() -> Unit): UpAxis {
-                val build = Builder()
-                build.builder()
-                return build.build()
-            }
-        }
+        /* companion object {
+             inline fun build(builder: Builder.() -> Unit): UpAxis {
+                 val build = Builder()
+                 build.builder()
+                 return build.build()
+             }
+         }*/
 
         var baseUrl: String = ""
-        private set
+            private set
         var authId: String = ""
-        private set
+            private set
 
         fun baseUrl(baseUrl: String) = apply { this.baseUrl = baseUrl }
 

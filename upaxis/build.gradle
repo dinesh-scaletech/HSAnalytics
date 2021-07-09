@@ -11,8 +11,6 @@ android {
     compileSdkVersion 30
     defaultConfig {
         minSdkVersion 21
-        versionCode 8
-        versionName "0.0.8"
     }
     lintOptions {
         abortOnError false
