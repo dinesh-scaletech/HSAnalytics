@@ -1,4 +1,4 @@
-# proximity-android
+# UpAxis
 
 ## Production Environment
 
