@@ -1,14 +1,14 @@
 package com.scaletech.hsanalytic
 
 import android.os.Build
-import com.scaletech.hsanalytic.model.DeviceData
+import org.json.JSONObject
 
 class HSData {
-    public fun getDeviceData(): DeviceData {
-        val deviceData = DeviceData()
-        deviceData.manufacturer = Build.MANUFACTURER
-        deviceData.model = Build.MODEL
-        deviceData.platform = "Android"
+    public fun getDeviceData(): JSONObject {
+        val deviceData = JSONObject()
+        deviceData.put("manufacturer", Build.MANUFACTURER)
+        deviceData.put("model", Build.MODEL)
+        deviceData.put("platform", "Android")
         return deviceData
     }
 }
