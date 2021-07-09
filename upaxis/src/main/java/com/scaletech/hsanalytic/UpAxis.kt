@@ -4,12 +4,13 @@ import android.os.Build
 import android.util.Log
 import com.scaletech.hsanalytic.apiservice.ApiInterface
 import com.scaletech.hsanalytic.apiservice.ApiProvider
+import com.scaletech.hsanalytic.apiservice.UpAxisCallBack
 import com.scaletech.hsanalytic.utils.*
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
 
-public class UpAxis(private val baseUrl: String, private val authId: String) {
+public class UpAxis(private val baseUrl: String, private val authId: String) :UpAxisCallBack<String> {
 
     private constructor(builder: Builder) : this(builder.baseUrl, builder.authId)
 
@@ -125,5 +126,14 @@ public class UpAxis(private val baseUrl: String, private val authId: String) {
         deviceData.put("platform", "Android")
         deviceData.put("appType", if (appType.isNullOrEmpty()) "Game" else "App")
         return deviceData
+    }
+
+    fun upAxisCallBack(callBack:UpAxisCallBack<String>) {}
+    override fun onResponse(call: Call<String>?, response: Response<String>?) {
+
+    }
+
+    override fun onFailure(call: Call<String>?, t: Throwable?) {
+
     }
 }
