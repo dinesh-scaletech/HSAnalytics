@@ -10,18 +10,16 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
 
-public class UpAxis(private val baseUrl: String, private val authId: String) :UpAxisCallBack<String> {
-
-    private constructor(builder: Builder) : this(builder.baseUrl, builder.authId)
+public class UpAxis :UpAxisCallBack<String> {
 
     /**
      * Method to track user action and provide info based on user information.
      */
     @JvmSuppressWildcards
     public fun trackUser(clickId: String, allowDuplicate: Boolean = false) {
-        val apiInterface: ApiInterface? = ApiProvider.createServiceString(baseUrl)
+        val apiInterface: ApiInterface? = ApiProvider.createServiceString()
         val queryParams = HashMap<String, Any?>()
-        queryParams[PARAM_K] = authId
+        queryParams[PARAM_K] = UpAxisConfig.AUTH_ID
         queryParams[PARAM_CLICK_ID] = clickId
         queryParams[PARAM_DUPLICATE] = if (allowDuplicate) 1 else 0
         val call = apiInterface?.trackRequest(queryParams)
@@ -46,9 +44,9 @@ public class UpAxis(private val baseUrl: String, private val authId: String) :Up
      */
     @JvmSuppressWildcards
     public fun eventCaptured(clickId: String, eventId: String) {
-        val apiInterface: ApiInterface? = ApiProvider.createServiceString(baseUrl)
+        val apiInterface: ApiInterface? = ApiProvider.createServiceString()
         val queryParams = HashMap<String, Any?>()
-        queryParams[PARAM_K] = authId
+        queryParams[PARAM_K] = UpAxisConfig.AUTH_ID
         queryParams[PARAM_EVENT_ID] = eventId
         queryParams[PARAM_CLICK_ID] = clickId
         queryParams[PARAM_DUPLICATE] = 1
@@ -74,9 +72,9 @@ public class UpAxis(private val baseUrl: String, private val authId: String) :Up
      */
     @JvmSuppressWildcards
     public fun sendExtraData(eventId: String,clickId: String, appType: String?) {
-        val apiInterface: ApiInterface? = ApiProvider.createServiceString(baseUrl)
+        val apiInterface: ApiInterface? = ApiProvider.createServiceString()
         val queryParams = HashMap<String, Any?>()
-        queryParams[PARAM_K] = authId
+        queryParams[PARAM_K] = UpAxisConfig.AUTH_ID
         queryParams[PARAM_EVENT_ID] = eventId
         queryParams[PARAM_CLICK_ID] = clickId
         queryParams[PARAM_DUPLICATE] = 1
@@ -96,28 +94,6 @@ public class UpAxis(private val baseUrl: String, private val authId: String) :Up
         })
 
     }
-
-    class Builder {
-        /* companion object {
-             inline fun build(builder: Builder.() -> Unit): UpAxis {
-                 val build = Builder()
-                 build.builder()
-                 return build.build()
-             }
-         }*/
-
-        var baseUrl: String = ""
-            private set
-        var authId: String = ""
-            private set
-
-        fun baseUrl(baseUrl: String) = apply { this.baseUrl = baseUrl }
-
-        fun authId(authId: String) = apply { this.authId = authId }
-        fun build() = UpAxis(this)
-
-    }
-
 
     private fun getDeviceData(appType: String?): JSONObject {
         val deviceData = JSONObject()

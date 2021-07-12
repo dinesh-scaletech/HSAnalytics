@@ -1,6 +1,7 @@
 package com.scaletech.hsanalytic.apiservice
 
 import android.util.Log
+import com.scaletech.hsanalytic.UpAxisConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -8,26 +9,30 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
 public class ApiProvider {
+    private var okHttpClient: OkHttpClient? = null
+
     companion object {
         private val provider = ApiProvider()
-        fun  createServiceString(baseUrl:String): ApiInterface? {
-            return provider.retrofitString(baseUrl)?.create(ApiInterface::class.java)
+        fun createServiceString(): ApiInterface? {
+            return provider.retrofitString()?.create(ApiInterface::class.java)
         }
     }
 
-    private fun retrofitString(baseUrl: String): Retrofit? {
-       return  Retrofit.Builder()
-            .baseUrl(baseUrl)
+    private fun retrofitString(): Retrofit? {
+        return Retrofit.Builder()
+            .baseUrl(UpAxisConfig.BASE_URL)
             .client(httpClient)
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
 
     }
 
-    private var okHttpClient: OkHttpClient? = null
+
     private val loggingInterceptor: HttpLoggingInterceptor = HttpLoggingInterceptor { message: String? ->
         run {
-            message?.let { Log.e("response", it) }
+            message?.let {
+                Log.e("response", it)
+            }
         }
     }.setLevel(HttpLoggingInterceptor.Level.BODY)
     private val httpClient: OkHttpClient?
