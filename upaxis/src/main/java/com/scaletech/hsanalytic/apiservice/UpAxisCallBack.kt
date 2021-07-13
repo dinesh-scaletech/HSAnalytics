@@ -18,4 +18,6 @@ interface UpAxisCallBack<T> {
          * occurred creating the request or processing the response.
          */
         fun onFailure(call: Call<T>?, t: Throwable?)
+
+        fun NoNetworkAvailable()
 }

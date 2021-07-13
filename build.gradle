@@ -30,3 +30,7 @@ allprojects {
     }
 }
 apply from: "${rootDir}/scripts/publish-root.gradle"
+
+
+/*
+gradlew upaxis:publishReleasePublicationToSonatypeRepository*/

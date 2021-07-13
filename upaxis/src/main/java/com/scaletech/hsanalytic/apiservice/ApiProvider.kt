@@ -5,6 +5,7 @@ import com.scaletech.hsanalytic.UpAxisConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
@@ -22,7 +23,7 @@ public class ApiProvider {
         return Retrofit.Builder()
             .baseUrl(UpAxisConfig.BASE_URL)
             .client(httpClient)
-            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
 
     }
