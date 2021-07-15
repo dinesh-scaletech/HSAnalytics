@@ -6,30 +6,27 @@ import android.util.Log
 import com.scaletech.hsanalytic.apiservice.ApiInterface
 import com.scaletech.hsanalytic.apiservice.ApiProvider
 import com.scaletech.hsanalytic.apiservice.UpAxisCallBack
+import com.scaletech.hsanalytic.model.UpAxisResponse
 import com.scaletech.hsanalytic.utils.*
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
 
-public class UpAxis(private val context: Context) :UpAxisCallBack<String> {
-    private var upAxisCallBack:UpAxisCallBack<String>?= null
-
-    init {
-        upAxisCallBack = this
-    }
-
+public class UpAxis(private val context: Context)  {
 
     /**
      * Method to track user action and provide info based on user information.
      */
     @JvmSuppressWildcards
-    public fun trackUser(clickId: String, allowDuplicate: Boolean = false) {
+    public fun trackUser(clickId: String, allowDuplicate: Boolean = false, upAxisCallBack: UpAxisCallBack<Void>) {
 
-        if(!validateUserData()){
+        if (!validateUserData()) {
+            upAxisCallBack.validationError("Validation Error")
             return
         }
 
-        if (!context.isNetworkAvailable()){
+        if (!context.isNetworkAvailable()) {
+            upAxisCallBack.noNetworkAvailable()
             return
         }
 
@@ -41,13 +38,21 @@ public class UpAxis(private val context: Context) :UpAxisCallBack<String> {
         val call = apiInterface?.postEvent(queryParams)
         call?.enqueue(object : retrofit2.Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                val upAxisResponse = UpAxisResponse()
+                upAxisResponse.body
+                upAxisResponse.responseCode
+                upAxisResponse.isSuccessful
+                upAxisResponse.errorBody
+                upAxisResponse.message
+                upAxisCallBack.onResponse(upAxisResponse)
                 if (response.code() == 200) {
                     response.body()?.let { Log.e("Response", it.toString()) }
                 }
             }
 
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                t.message?.let { Log.e("onFailure", it) }
+            override fun onFailure(call: Call<Void>, throwable: Throwable) {
+                upAxisCallBack.onFailure(throwable)
+                throwable.message?.let { Log.e("onFailure", it) }
             }
 
         })
@@ -60,11 +65,11 @@ public class UpAxis(private val context: Context) :UpAxisCallBack<String> {
      */
     @JvmSuppressWildcards
     public fun eventCaptured(clickId: String, eventId: String) {
-        if(!validateUserData()){
+        if (!validateUserData()) {
             return
         }
 
-        if (!context.isNetworkAvailable()){
+        if (!context.isNetworkAvailable()) {
             return
         }
         val apiInterface: ApiInterface? = ApiProvider.createServiceString()
@@ -94,12 +99,12 @@ public class UpAxis(private val context: Context) :UpAxisCallBack<String> {
      * Method to track user action and provide info based on user information.
      */
     @JvmSuppressWildcards
-    public fun sendExtraData(eventId: String,clickId: String, appType: String?) {
-        if(!validateUserData()){
+    public fun sendExtraData(eventId: String, clickId: String, appType: String?) {
+        if (!validateUserData()) {
             return
         }
 
-        if (!context.isNetworkAvailable()){
+        if (!context.isNetworkAvailable()) {
             return
         }
         val apiInterface: ApiInterface? = ApiProvider.createServiceString()
@@ -125,9 +130,9 @@ public class UpAxis(private val context: Context) :UpAxisCallBack<String> {
 
     }
 
-    private fun validateUserData():Boolean{
+    private fun validateUserData(): Boolean {
 
-        if(UpAxisConfig.AUTH_ID.isNullOrEmpty() || UpAxisConfig.BASE_URL.isNullOrEmpty()) {
+        if (UpAxisConfig.AUTH_ID.isNullOrEmpty() || UpAxisConfig.BASE_URL.isNullOrEmpty()) {
             return false
         }
         return true
@@ -142,14 +147,4 @@ public class UpAxis(private val context: Context) :UpAxisCallBack<String> {
         return deviceData
     }
 
-    override fun onResponse(call: Call<String>?, response: Response<String>?) {
-
-    }
-
-    override fun onFailure(call: Call<String>?, t: Throwable?) {
-
-    }
-
-    override fun NoNetworkAvailable() {
-    }
 }

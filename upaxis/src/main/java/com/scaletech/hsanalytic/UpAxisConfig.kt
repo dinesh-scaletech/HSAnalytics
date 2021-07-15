@@ -13,14 +13,6 @@ public class UpAxisConfig() {
     }
 
     class Builder {
-        /* companion object {
-             inline fun build(builder: Builder.() -> Unit): UpAxisConfig {
-                 val build = Builder()
-                 build.builder()
-                 return build.build()
-             }
-         }*/
-
         var baseUrl: String = ""
             private set
         var authId: String = ""
