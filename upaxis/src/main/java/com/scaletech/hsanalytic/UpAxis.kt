@@ -2,7 +2,6 @@ package com.scaletech.hsanalytic
 
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import com.scaletech.hsanalytic.apiservice.ApiInterface
 import com.scaletech.hsanalytic.apiservice.ApiProvider
 import com.scaletech.hsanalytic.apiservice.UpAxisCallBack
@@ -12,7 +11,7 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
 
-public class UpAxis(private val context: Context)  {
+public class UpAxis(private val context: Context) {
 
     /**
      * Method to track user action and provide info based on user information.
@@ -38,21 +37,11 @@ public class UpAxis(private val context: Context)  {
         val call = apiInterface?.postEvent(queryParams)
         call?.enqueue(object : retrofit2.Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                val upAxisResponse = UpAxisResponse()
-                upAxisResponse.body
-                upAxisResponse.responseCode
-                upAxisResponse.isSuccessful
-                upAxisResponse.errorBody
-                upAxisResponse.message
-                upAxisCallBack.onResponse(upAxisResponse)
-                if (response.code() == 200) {
-                    response.body()?.let { Log.e("Response", it.toString()) }
-                }
+                upAxisCallBack.onResponse(setUpResponseData(response))
             }
 
             override fun onFailure(call: Call<Void>, throwable: Throwable) {
                 upAxisCallBack.onFailure(throwable)
-                throwable.message?.let { Log.e("onFailure", it) }
             }
 
         })
@@ -64,12 +53,14 @@ public class UpAxis(private val context: Context)  {
      * Method to track user action and provide info based on user information.
      */
     @JvmSuppressWildcards
-    public fun eventCaptured(clickId: String, eventId: String) {
+    public fun eventCaptured(clickId: String, eventId: String, upAxisCallBack: UpAxisCallBack<Void>) {
         if (!validateUserData()) {
+            upAxisCallBack.validationError("Validation Error")
             return
         }
 
         if (!context.isNetworkAvailable()) {
+            upAxisCallBack.noNetworkAvailable()
             return
         }
         val apiInterface: ApiInterface? = ApiProvider.createServiceString()
@@ -81,13 +72,11 @@ public class UpAxis(private val context: Context)  {
         val call = apiInterface?.postEvent(queryParams)
         call?.enqueue(object : retrofit2.Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.code() == 200) {
-                    response.body()?.let { Log.e("Response", it.toString()) }
-                }
+                upAxisCallBack.onResponse(setUpResponseData(response))
             }
 
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                t.message?.let { Log.e("onFailure", it) }
+            override fun onFailure(call: Call<Void>, throwable: Throwable) {
+                upAxisCallBack.onFailure(throwable)
             }
 
         })
@@ -99,12 +88,14 @@ public class UpAxis(private val context: Context)  {
      * Method to track user action and provide info based on user information.
      */
     @JvmSuppressWildcards
-    public fun sendExtraData(eventId: String, clickId: String, appType: String?) {
+    public fun sendExtraData(eventId: String, clickId: String, appType: String?, upAxisCallBack: UpAxisCallBack<Void>) {
         if (!validateUserData()) {
+            upAxisCallBack.validationError("Validation Error")
             return
         }
 
         if (!context.isNetworkAvailable()) {
+            upAxisCallBack.noNetworkAvailable()
             return
         }
         val apiInterface: ApiInterface? = ApiProvider.createServiceString()
@@ -117,21 +108,17 @@ public class UpAxis(private val context: Context)  {
         val call = apiInterface?.postEvent(queryParams)
         call?.enqueue(object : retrofit2.Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.code() == 200) {
-                    response.body()?.let { Log.e("Response", it.toString()) }
-                }
+                upAxisCallBack.onResponse(setUpResponseData(response))
             }
 
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                t.message?.let { Log.e("onFailure", it) }
+            override fun onFailure(call: Call<Void>, throwable: Throwable) {
+                upAxisCallBack.onFailure(throwable)
             }
-
         })
 
     }
 
     private fun validateUserData(): Boolean {
-
         if (UpAxisConfig.AUTH_ID.isNullOrEmpty() || UpAxisConfig.BASE_URL.isNullOrEmpty()) {
             return false
         }
@@ -145,6 +132,16 @@ public class UpAxis(private val context: Context)  {
         deviceData.put("platform", "Android")
         deviceData.put("appType", if (appType.isNullOrEmpty()) "Game" else "App")
         return deviceData
+    }
+
+    private fun setUpResponseData(response: Response<Void>): UpAxisResponse {
+        val upAxisResponse = UpAxisResponse()
+        upAxisResponse.body = response.body()
+        upAxisResponse.responseCode = response.code()
+        upAxisResponse.isSuccessful = response.isSuccessful
+        upAxisResponse.errorBody = response.errorBody().toString()
+        upAxisResponse.message = response.message()
+        return upAxisResponse
     }
 
 }
