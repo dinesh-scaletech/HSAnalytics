@@ -30,11 +30,11 @@ public class ApiProvider {
 
 
     private val loggingInterceptor: HttpLoggingInterceptor = HttpLoggingInterceptor { message: String? ->
-        run {
+       /* run {
             message?.let {
                 Log.e("response", it)
             }
-        }
+        }*/
     }.setLevel(HttpLoggingInterceptor.Level.BODY)
     private val httpClient: OkHttpClient?
         get() {

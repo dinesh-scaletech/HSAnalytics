@@ -6,6 +6,7 @@ import com.scaletech.hsanalytic.apiservice.ApiInterface
 import com.scaletech.hsanalytic.apiservice.ApiProvider
 import com.scaletech.hsanalytic.apiservice.UpAxisCallBack
 import com.scaletech.hsanalytic.model.UpAxisResponse
+import com.scaletech.hsanalytic.pref.UpAxisPref
 import com.scaletech.hsanalytic.utils.*
 import org.json.JSONObject
 import retrofit2.Call
@@ -17,13 +18,12 @@ public class UpAxis(private val context: Context) {
      * Method to track user action and provide info based on user information.
      */
     @JvmSuppressWildcards
-    public fun trackUser(clickId: String, allowDuplicate: Boolean = false, upAxisCallBack: UpAxisCallBack<Void>) {
-
-        if (!validateUserData()) {
-            upAxisCallBack.validationError("Validation Error")
+    public fun trackUser(allowDuplicate: Boolean = false, upAxisCallBack: UpAxisCallBack<Void>) {
+        val pair = validateUserData()
+        if (!pair.first) {
+            upAxisCallBack.validationError(pair.second)
             return
         }
-
         if (!context.isNetworkAvailable()) {
             upAxisCallBack.noNetworkAvailable()
             return
@@ -32,7 +32,7 @@ public class UpAxis(private val context: Context) {
         val apiInterface: ApiInterface? = ApiProvider.createServiceString()
         val queryParams = HashMap<String, Any>()
         queryParams[PARAM_K] = UpAxisConfig.AUTH_ID!!
-        queryParams[PARAM_CLICK_ID] = clickId
+        queryParams[PARAM_CLICK_ID] = UpAxisPref.getInstance(context).getValue(UpAxisPref.REFERRAL, "")
         queryParams[PARAM_DUPLICATE] = if (allowDuplicate) 1 else 0
         val call = apiInterface?.postEvent(queryParams)
         call?.enqueue(object : retrofit2.Callback<Void> {
@@ -53,12 +53,12 @@ public class UpAxis(private val context: Context) {
      * Method to track user action and provide info based on user information.
      */
     @JvmSuppressWildcards
-    public fun eventCaptured(clickId: String, eventId: String, upAxisCallBack: UpAxisCallBack<Void>) {
-        if (!validateUserData()) {
-            upAxisCallBack.validationError("Validation Error")
+    public fun eventCaptured(eventId: String, upAxisCallBack: UpAxisCallBack<Void>) {
+        val pair = validateUserData()
+        if (!pair.first) {
+            upAxisCallBack.validationError(pair.second)
             return
         }
-
         if (!context.isNetworkAvailable()) {
             upAxisCallBack.noNetworkAvailable()
             return
@@ -67,7 +67,7 @@ public class UpAxis(private val context: Context) {
         val queryParams = HashMap<String, Any>()
         queryParams[PARAM_K] = UpAxisConfig.AUTH_ID!!
         queryParams[PARAM_EVENT_ID] = eventId
-        queryParams[PARAM_CLICK_ID] = clickId
+        queryParams[PARAM_CLICK_ID] = UpAxisPref.getInstance(context).getValue(UpAxisPref.REFERRAL, "")
         queryParams[PARAM_DUPLICATE] = 1
         val call = apiInterface?.postEvent(queryParams)
         call?.enqueue(object : retrofit2.Callback<Void> {
@@ -78,22 +78,19 @@ public class UpAxis(private val context: Context) {
             override fun onFailure(call: Call<Void>, throwable: Throwable) {
                 upAxisCallBack.onFailure(throwable)
             }
-
         })
-
     }
-
 
     /**
      * Method to track user action and provide info based on user information.
      */
     @JvmSuppressWildcards
-    public fun sendExtraData(eventId: String, clickId: String, appType: String?, upAxisCallBack: UpAxisCallBack<Void>) {
-        if (!validateUserData()) {
-            upAxisCallBack.validationError("Validation Error")
+    public fun sendExtraData(eventId: String, appType: String?, upAxisCallBack: UpAxisCallBack<Void>) {
+        val pair = validateUserData()
+        if (!pair.first) {
+            upAxisCallBack.validationError(pair.second)
             return
         }
-
         if (!context.isNetworkAvailable()) {
             upAxisCallBack.noNetworkAvailable()
             return
@@ -102,7 +99,7 @@ public class UpAxis(private val context: Context) {
         val queryParams = HashMap<String, Any>()
         queryParams[PARAM_K] = UpAxisConfig.AUTH_ID!!
         queryParams[PARAM_EVENT_ID] = eventId
-        queryParams[PARAM_CLICK_ID] = clickId
+        queryParams[PARAM_CLICK_ID] = UpAxisPref.getInstance(context).getValue(UpAxisPref.REFERRAL, "")
         queryParams[PARAM_DUPLICATE] = 1
         queryParams[PARAM_DETAILS] = getDeviceData(appType)
         val call = apiInterface?.postEvent(queryParams)
@@ -118,11 +115,23 @@ public class UpAxis(private val context: Context) {
 
     }
 
-    private fun validateUserData(): Boolean {
-        if (UpAxisConfig.AUTH_ID.isNullOrEmpty() || UpAxisConfig.BASE_URL.isNullOrEmpty()) {
-            return false
+    public fun saveReferral(referralCode: String) {
+        UpAxisPref.getInstance(context).setValue(UpAxisPref.REFERRAL, referralCode)
+    }
+
+    private fun validateUserData(): Pair<Boolean, String> {
+        if (UpAxisConfig.AUTH_ID.isNullOrEmpty()) {
+            return Pair(false, "Auth Id is null")
         }
-        return true
+
+        if (UpAxisConfig.BASE_URL.isNullOrEmpty()) {
+            return Pair(false, "BaseUrl is null")
+        }
+
+        if (UpAxisPref.getInstance(context).getValue(UpAxisPref.REFERRAL, "").isEmpty()) {
+            return Pair(false, "Referral is null")
+        }
+        return Pair(true, "")
     }
 
     private fun getDeviceData(appType: String?): JSONObject {
