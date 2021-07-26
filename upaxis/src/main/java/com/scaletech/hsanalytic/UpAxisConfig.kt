@@ -58,8 +58,9 @@ public class UpAxisConfig() {
                 when (responseCode) {
                     InstallReferrerClient.InstallReferrerResponse.OK -> {
                         val response: ReferrerDetails = referrerClient.installReferrer
-                        if (!response.installReferrer.isNullOrEmpty()) {
+                        if (!response.referrerClickTimestampSeconds > 0) {
                             Log.e("ReferralCode", response.installReferrer)
+                            Log.e("referrerClickTimestampSeconds", response.referrerClickTimestampSeconds.toString())
                             context?.let { UpAxisPref.getInstance(it).setValue(UpAxisPref.REFERRAL, response.installReferrer) }
                         }
                     }
@@ -76,6 +77,7 @@ public class UpAxisConfig() {
                     }
                 }
             }
+
             override fun onInstallReferrerServiceDisconnected() {
             }
         })
