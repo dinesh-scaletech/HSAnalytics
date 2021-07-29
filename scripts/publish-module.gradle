@@ -58,7 +58,7 @@ afterEvaluate {
 
                 pom {
                     name = 'UpAxis'
-                    description = 'UpAxis sdk to track user business action in background'
+                    description = 'UpAxis sdk to track user install event in background'
                     url = 'https ://github.com/dinesh-scaletech/HSAnalytics/'
                     licenses {
                         license {

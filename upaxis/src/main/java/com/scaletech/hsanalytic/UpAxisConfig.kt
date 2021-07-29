@@ -58,11 +58,12 @@ public class UpAxisConfig() {
                 when (responseCode) {
                     InstallReferrerClient.InstallReferrerResponse.OK -> {
                         val response: ReferrerDetails = referrerClient.installReferrer
-                        if (!response.referrerClickTimestampSeconds > 0) {
+                        if (response.referrerClickTimestampSeconds > 0) {
                             Log.e("ReferralCode", response.installReferrer)
-                            Log.e("referrerClickTimestampSeconds", response.referrerClickTimestampSeconds.toString())
+                            Log.e("referrerSeconds", response.referrerClickTimestampSeconds.toString())
                             context?.let { UpAxisPref.getInstance(it).setValue(UpAxisPref.REFERRAL, response.installReferrer) }
                         }
+
                     }
                     InstallReferrerClient.InstallReferrerResponse.FEATURE_NOT_SUPPORTED -> {
                         // API not available on the current Play Store app.
