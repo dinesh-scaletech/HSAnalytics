@@ -38,7 +38,7 @@ const val PARAM_EVENT_ID: String = "eventid"
 const val PARAM_RECEIVE: String = "receive"
 
 /**
- * Either 0 or 1, if 1 duplicate postbacks with the same clickid and eventid are allowed.
+ * Either 0 or 1, if 1 duplicate post backs with the same clickid and eventid are allowed.
  * Otherwise they are rejected. Default is 0
  * Date type: Integer
  * Required: no
@@ -46,7 +46,7 @@ const val PARAM_RECEIVE: String = "receive"
 const val PARAM_DUPLICATE: String = "duplicate"
 
 /**
- * Either 0 or 1, if 1 postbacks will be queued and not handled in real time.
+ * Either 0 or 1, if 1 post backs will be queued and not handled in real time.
  * Default is 0
  * Date type: Integer
  * Required: no

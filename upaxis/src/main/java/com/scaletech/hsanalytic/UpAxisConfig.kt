@@ -16,29 +16,29 @@ public class UpAxisConfig() {
     companion object {
         internal var BASE_URL: String? = null
         internal var AUTH_ID: String? = null
+        internal var ALLOW_DUPLICATE: Boolean = false
     }
 
     private constructor(builder: Builder) : this() {
         BASE_URL = builder.baseUrl
         AUTH_ID = builder.authId
         context = builder.context
+        ALLOW_DUPLICATE = builder.duplicateEvent
         referrerClient = InstallReferrerClient.newBuilder(builder.context).build()
         setUpReferrerClient()
     }
 
     class Builder {
-        var baseUrl: String = ""
-            private set
-        var authId: String = ""
-            private set
-
-        var context: Context? = null
-            private set
+        internal var baseUrl: String = ""
+        internal var authId: String = ""
+        internal var context: Context? = null
+        internal var duplicateEvent:Boolean = false
 
         fun baseUrl(baseUrl: String) = apply { this.baseUrl = baseUrl }
 
         fun authId(authId: String) = apply { this.authId = authId }
         fun setContext(context: Context) = apply { this.context = context }
+        fun setAllowDuplicate(duplicateEvent: Boolean) = apply { this.duplicateEvent = duplicateEvent }
         fun build() = UpAxisConfig(this)
 
     }
