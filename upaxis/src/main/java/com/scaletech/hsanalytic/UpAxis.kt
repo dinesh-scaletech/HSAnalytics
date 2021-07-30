@@ -23,7 +23,7 @@ public class UpAxis(private val context: Context) {
      * @param receive : String. Monitoring value that should assigned to this conversion.
      * value should be in decimal format in string data type.
      * @param queue: Boolean. Either 0 (false) or 1(true), if 1 post backs will be queued and not handled in real time. default is 0
-     * @param extraData:JSONObject. Any additional parameter can pass here in jsonObject.
+     * @param extraData:JSONObject. Any additional parameter can pass here in JSONObject.
      * @param upAxisCallBack Async call back inline function. here we used Void to get response in string.
      * for now are are not care about response from the server. we just need to post event.
      * while development process, we can check error or response data in application.
