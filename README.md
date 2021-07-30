@@ -30,9 +30,9 @@ UpAxisConfig.Builder()
 Java:
 ```
 new UpAxisConfig.Builder()
-               .setContext(getBaseContext())
-               .baseUrl(baseUrl)
-               .authId(authId)
+               .setContext(getBaseContext()) // MANDATORY: Application Context is mandatory
+               .baseUrl(baseUrl) // MANDATORY: API call Base url. Default is null. You must need to set up this non empty url.
+               .authId(authId) // MANDATORY: Application authorization unique code.
                .setAllowDuplicate(true) // Optional : Use only for development purpose.
                .build();
 ```
@@ -72,7 +72,7 @@ class Class A extends AppCompactActicity{
            super.onCreate(savedInstanceState);
 
            //....
-           upAxis = new UpAxis(this)
+           upAxis = new UpAxis(this);
            //....
        }
 
@@ -82,10 +82,10 @@ class Class A extends AppCompactActicity{
 
 ### List of Events
 
-1.postInstallEvent
-   - This is an independent method will be called from SDK itself. this method can not be called from outside of this class for 1.0.0 SDK version.
+1. ***postInstallEvent***
+   This is an independent method will be called from SDK itself. this method can not be called from outside of this class for 1.0.0 SDK version.
 
-2. postEvent
+2. ***postEvent***
    - Single function to post all kinds of data to the server.
 
    List of parameters:
@@ -119,7 +119,7 @@ class Class A extends AppCompactActicity{
            })
    ```
 
-   If You Call back response is not required,
+   When Call back response is not needed,
 
    ```
    upAxis?.postEvent(eventId = "1")
@@ -151,7 +151,7 @@ class Class A extends AppCompactActicity{
            });
    ```
 
-   If You Call back response is not required, Pass null in the last input parameter.
+   When Call back response is not needed, Pass null in the last input parameter.
 
    ```
    upAxis.postEvent("1" ,null,null,false, new JSONObject(),null);
