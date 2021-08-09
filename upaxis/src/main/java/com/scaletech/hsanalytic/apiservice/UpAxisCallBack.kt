@@ -1,7 +1,6 @@
 package com.scaletech.hsanalytic.apiservice
 
 import com.scaletech.hsanalytic.model.UpAxisResponse
-import retrofit2.Call
 import retrofit2.Response
 
 interface UpAxisCallBack<T> {

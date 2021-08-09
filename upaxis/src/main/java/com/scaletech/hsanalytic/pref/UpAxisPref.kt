@@ -13,6 +13,7 @@ class UpAxisPref constructor(mContext: Context) {
         private const val PREF_NAME = "upaxis_data"
         private var instance: UpAxisPref? = null
         internal const val REFERRAL = "referral"
+        internal const val INSTALLED = "installed"
 
         @Synchronized
         fun getInstance(context: Context): UpAxisPref {
