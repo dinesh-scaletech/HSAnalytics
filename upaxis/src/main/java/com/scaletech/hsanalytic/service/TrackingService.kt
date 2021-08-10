@@ -9,6 +9,7 @@ import com.scaletech.hsanalytic.UpAxisConfig
 import com.scaletech.hsanalytic.apiservice.UpAxisCallBack
 import com.scaletech.hsanalytic.model.UpAxisResponse
 import kotlinx.coroutines.*
+import java.util.concurrent.TimeUnit
 
 class TrackingService : Service() {
 
@@ -36,13 +37,18 @@ class TrackingService : Service() {
     private fun startRepeatingJob(): Job {
         return CoroutineScope(Dispatchers.IO).launch {
             while (NonCancellable.isActive) {
-                delay(UpAxisConfig.TRACK_INTERVAL)
                 updateServer()
+                delay(TimeUnit.MINUTES.toMinutes(UpAxisConfig.TRACK_INTERVAL.toLong()))
             }
         }
     }
 
     private fun updateServer() {
+
+        if (!UpAxisConfig.TRACK_USER) {
+            stopJob()
+            stopSelf()
+        }
         upAxis?.postUserTrackEvent(eventId = UpAxisConfig.TRACK_EVENT_NAME, upAxisCallBack = object : UpAxisCallBack<Void> {
             override fun onResponse(upAxisResponse: UpAxisResponse) {
                 Log.e("Track User onResponse", "Status::{${upAxisResponse.isSuccessful}}")
@@ -63,11 +69,17 @@ class TrackingService : Service() {
         })
     }
 
+    /**
+     * Function to start tracking by starting job.
+     */
     fun startTracking() {
         job?.start()
     }
 
-    fun stopJob() {
+    /**
+     * Function to stop tracking by cancelling ongoing job.
+     */
+    private fun stopJob() {
         job?.cancel()
     }
 

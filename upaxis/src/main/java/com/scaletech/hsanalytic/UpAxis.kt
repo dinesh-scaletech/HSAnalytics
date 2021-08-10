@@ -17,7 +17,7 @@ import retrofit2.Response
 import java.io.IOException
 
 
-public class UpAxis(private val context: Context) {
+class UpAxis(private val context: Context) {
 
     private var adIdInfo: AdvertisingIdClient.Info? = null
 
@@ -226,10 +226,16 @@ public class UpAxis(private val context: Context) {
         return upAxisResponse
     }
 
+    /**
+     * Function to start service if it is not running
+     */
     public fun startUserTrackingService() {
         context.startUserTrackingService()
     }
 
+    /**
+     * Function to stop user tracking and stop running service.
+     */
     public fun stopUserTrackingService() {
         context.stopUserTrackingService()
     }
@@ -238,20 +244,22 @@ public class UpAxis(private val context: Context) {
         if (adIdInfo != null) {
             return
         }
-
-        try {
-            val advertisingIdInfo = AdvertisingIdClient.getAdvertisingIdInfo(context)
-            // You should check this in case the user disabled it from settings
-            if (!advertisingIdInfo.isLimitAdTrackingEnabled) {
-                adIdInfo = advertisingIdInfo
+        Thread {
+            try {
+                val advertisingIdInfo = AdvertisingIdClient.getAdvertisingIdInfo(context)
+                // You should check this in case the user disabled it from settings
+                if (!advertisingIdInfo.isLimitAdTrackingEnabled) {
+                    adIdInfo = advertisingIdInfo
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            } catch (e: GooglePlayServicesNotAvailableException) {
+                e.printStackTrace()
+            } catch (e: GooglePlayServicesRepairableException) {
+                e.printStackTrace()
             }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } catch (e: GooglePlayServicesNotAvailableException) {
-            e.printStackTrace()
-        } catch (e: GooglePlayServicesRepairableException) {
-            e.printStackTrace()
-        }
+        }.start()
+
     }
 
 }

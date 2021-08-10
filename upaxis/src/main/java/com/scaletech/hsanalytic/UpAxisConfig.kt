@@ -29,9 +29,8 @@ class UpAxisConfig() {
         // Flag to check either enable user tracking or not.
         internal var TRACK_USER: Boolean = false
 
-        // User tracking interval in seconds. minimum it should be 5 minutes(300 Seconds)
-        //todo temp set to 60. it should be 300L
-        internal var TRACK_INTERVAL: Long = 60L
+        // User tracking interval in minutes. minimum it should be 5 minutes.
+        internal var TRACK_INTERVAL: Int = 5
 
         // default track event name to log app session event
         internal var TRACK_EVENT_NAME: String = "session"
@@ -59,7 +58,7 @@ class UpAxisConfig() {
         internal var authId: String = ""
         internal var context: Context? = null
         internal var duplicateEvent: Boolean = false
-        internal var interval: Long = 300L
+        internal var interval: Int = 5
         internal var trackUser:Boolean = false
         internal var trackEventName: String = "session"
 
@@ -68,17 +67,11 @@ class UpAxisConfig() {
         fun setContext(context: Context) = apply { this.context = context }
         fun setAllowDuplicate(duplicateEvent: Boolean) = apply { this.duplicateEvent = duplicateEvent }
         fun setTrackUser(trackUser: Boolean) = apply { this.trackUser = trackUser }
-        fun setTrackInterval(interval: Long) = apply { this.interval = interval }
+        fun setTrackInterval(interval: Int) = apply { this.interval = interval }
         fun setTrackEventName(trackEventName: String) = apply { this.trackEventName = trackEventName }
         fun build() = UpAxisConfig(this)
 
     }
-
-    /*public fun validateConfigs(){
-        if (baseUrl.isEmpty()){
-            return
-        }
-    }*/
 
     /**
      * method for referrer client connection
@@ -90,9 +83,6 @@ class UpAxisConfig() {
                     InstallReferrerClient.InstallReferrerResponse.OK -> {
                         val response: ReferrerDetails = referrerClient.installReferrer
                         if (response.referrerClickTimestampSeconds > 0) {
-
-                            Log.e("ReferralCode", response.installReferrer)
-                            Log.e("referrerSeconds", response.referrerClickTimestampSeconds.toString())
                             context?.let {
                                 if (response.installReferrer.isNullOrEmpty())
                                     return
@@ -106,7 +96,6 @@ class UpAxisConfig() {
                                         override fun onResponse(upAxisResponse: UpAxisResponse) {
                                             UpAxisPref.getInstance(it).setValue(UpAxisPref.INSTALLED, true)
                                         }
-
                                         override fun onFailure(t: Throwable?) {}
                                         override fun noNetworkAvailable() {}
                                         override fun validationError(message: String) {}
