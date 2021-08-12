@@ -45,7 +45,7 @@ class UpAxisConfig() {
         TRACK_USER = builder.trackUser
         TRACK_EVENT_NAME = builder.trackEventName
         referrerClient = InstallReferrerClient.newBuilder(builder.context).build()
-        if (TRACK_INTERVAL < 60) {
+        if (TRACK_INTERVAL < 5) {
             throw java.lang.Exception("User tracking interval must be equal or more than 5 minutes")
         }
        context?.startUserTrackingService()
