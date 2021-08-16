@@ -29,8 +29,8 @@ class UpAxisConfig() {
         // Flag to check either enable user tracking or not.
         internal var TRACK_USER: Boolean = false
 
-        // User tracking interval in minutes. minimum it should be 5 minutes.
-        internal var TRACK_INTERVAL: Int = 5
+        // User tracking interval in milliseconds. minimum it should be 5 minutes. (300000 milliseconds)
+        internal var TRACK_INTERVAL: Int = 300000
 
         // default track event name to log app session event
         internal var TRACK_EVENT_NAME: String = "session"
@@ -45,10 +45,12 @@ class UpAxisConfig() {
         TRACK_USER = builder.trackUser
         TRACK_EVENT_NAME = builder.trackEventName
         referrerClient = InstallReferrerClient.newBuilder(builder.context).build()
-        if (TRACK_INTERVAL < 5) {
-            throw java.lang.Exception("User tracking interval must be equal or more than 5 minutes")
+        if (TRACK_USER && TRACK_INTERVAL < 300000) {
+            throw java.lang.Exception("User tracking interval must be equal or more than 300000 milliseconds(5 Minutes)")
         }
-       context?.startUserTrackingService()
+        if (TRACK_USER) {
+            context?.startUserTrackingService()
+        }
         setUpReferrerClient()
     }
 
@@ -58,8 +60,8 @@ class UpAxisConfig() {
         internal var authId: String = ""
         internal var context: Context? = null
         internal var duplicateEvent: Boolean = false
-        internal var interval: Int = 5
-        internal var trackUser:Boolean = false
+        internal var interval: Int = 300000
+        internal var trackUser: Boolean = false
         internal var trackEventName: String = "session"
 
         fun baseUrl(baseUrl: String) = apply { this.baseUrl = baseUrl }
@@ -96,6 +98,7 @@ class UpAxisConfig() {
                                         override fun onResponse(upAxisResponse: UpAxisResponse) {
                                             UpAxisPref.getInstance(it).setValue(UpAxisPref.INSTALLED, true)
                                         }
+
                                         override fun onFailure(t: Throwable?) {}
                                         override fun noNetworkAvailable() {}
                                         override fun validationError(message: String) {}

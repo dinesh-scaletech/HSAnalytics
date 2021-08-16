@@ -6,6 +6,7 @@ import android.os.IBinder
 import android.util.Log
 import com.scaletech.hsanalytic.UpAxis
 import com.scaletech.hsanalytic.UpAxisConfig
+import com.scaletech.hsanalytic.UpAxisConfig.Companion.TRACK_INTERVAL
 import com.scaletech.hsanalytic.apiservice.UpAxisCallBack
 import com.scaletech.hsanalytic.model.UpAxisResponse
 import kotlinx.coroutines.*
@@ -38,7 +39,7 @@ class TrackingService : Service() {
         return CoroutineScope(Dispatchers.IO).launch {
             while (NonCancellable.isActive) {
                 updateServer()
-                delay(TimeUnit.MINUTES.toMinutes(UpAxisConfig.TRACK_INTERVAL.toLong()))
+                delay(TRACK_INTERVAL.toLong())
             }
         }
     }

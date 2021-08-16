@@ -9,7 +9,7 @@ UpAxis SDK is useful for developers to integrate referral tracking events in som
 Always use an updated library version to get stable and more features. Add the Updated library version in your module's Gradle file.
 
 ```
-implementation "io.github.dinesh-scaletech:UpAxis:1.0.1"
+implementation "io.github.dinesh-scaletech:UpAxis:1.0.3"
 ```
 
 ### Set Configuration
@@ -25,7 +25,7 @@ UpAxisConfig.Builder()
     .baseUrl(baseUrl) // MANDATORY: API call Base url. Default is null. You must need to set up this non empty url.
     .authId(authId) // MANDATORY: Application authorization unique code.
     .setAllowDuplicate(true) // Optional : Use only for development purpose.
-    .setTrackInterval(interval) // Optional: Set user tracking interval. it must be greater or equal to 5 minutes.
+    .setTrackInterval(interval) // Optional: Set user tracking interval in milliseconds. it must be greater or equal to 5 minutes (300000 milliseconds).
     .setTrackUser(trackUser) // Optional: Enable to track the user. default is false.
     .setTrackEventName(eventName) //Optional: This parameter related with trackUser flag. if trackUser is false, value of this parameter will be ignored. default event name is "session"
     .build()
@@ -39,7 +39,7 @@ new UpAxisConfig.Builder()
      .baseUrl(baseUrl) // MANDATORY: API call Base url. Default is null. You must need to set up this non empty url.
      .authId(authId) // MANDATORY: Application authorization unique code.
      .setAllowDuplicate(true) // Optional : Use only for development purpose.
-     .setTrackInterval(interval) // Optional: Set user tracking interval. it must be greater or equal to 5 minutes.
+     .setTrackInterval(interval) // Optional: Set user tracking interval in milliseconds. it must be greater or equal to 5 minutes.
      .setTrackUser(trackUser) // Optional: Enable to track the user. default is false.
      .setTrackEventName(eventName) //Optional: This parameter related with trackUser flag. if trackUser is false, value of this parameter will be ignored. default event name is "session"
      .build();
