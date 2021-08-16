@@ -41,7 +41,7 @@ class UpAxis(private val context: Context) {
      */
     @JvmSuppressWildcards
     public fun postEvent(
-        eventId: String?, transactionId: UpAxisCallBack<Void>? = null, receive: String? = null,
+        eventId: String?, transactionId: String ?= null, receive: String? = null,
         queue: Boolean = false, extraData: JSONObject = JSONObject(), upAxisCallBack: UpAxisCallBack<Void>? = null
     ) {
         val pair = validateUserData()
