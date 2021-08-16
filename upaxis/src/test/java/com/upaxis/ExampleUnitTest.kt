@@ -1,4 +1,4 @@
-package com.scaletech.myapplication
+package com.upaxis
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

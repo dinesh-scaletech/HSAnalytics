@@ -1,4 +1,4 @@
-package com.scaletech.hsanalytic.utils
+package com.upaxis.utils
 
 /**
  *  Unique clickid that is pass via referral to google plat store

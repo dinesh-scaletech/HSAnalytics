@@ -1,16 +1,15 @@
-package com.scaletech.hsanalytic.service
+package com.upaxis.service
 
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
-import com.scaletech.hsanalytic.UpAxis
-import com.scaletech.hsanalytic.UpAxisConfig
-import com.scaletech.hsanalytic.UpAxisConfig.Companion.TRACK_INTERVAL
-import com.scaletech.hsanalytic.apiservice.UpAxisCallBack
-import com.scaletech.hsanalytic.model.UpAxisResponse
+import com.upaxis.UpAxis
+import com.upaxis.UpAxisConfig
+import com.upaxis.UpAxisConfig.Companion.TRACK_INTERVAL
+import com.upaxis.apiservice.UpAxisCallBack
+import com.upaxis.model.UpAxisResponse
 import kotlinx.coroutines.*
-import java.util.concurrent.TimeUnit
 
 class TrackingService : Service() {
 

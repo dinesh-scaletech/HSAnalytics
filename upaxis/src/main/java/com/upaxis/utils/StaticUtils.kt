@@ -1,4 +1,4 @@
-package com.scaletech.hsanalytic.utils
+package com.upaxis.utils
 
 import android.app.ActivityManager
 import android.content.Context
@@ -6,8 +6,8 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import com.scaletech.hsanalytic.UpAxisConfig
-import com.scaletech.hsanalytic.service.TrackingService
+import com.upaxis.UpAxisConfig
+import com.upaxis.service.TrackingService
 
 
 internal fun Context.isNetworkAvailable(): Boolean {

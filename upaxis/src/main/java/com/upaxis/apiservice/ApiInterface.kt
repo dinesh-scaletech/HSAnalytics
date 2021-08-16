@@ -1,4 +1,4 @@
-package com.scaletech.hsanalytic.apiservice
+package com.upaxis.apiservice
 
 import retrofit2.Call
 import retrofit2.http.Body

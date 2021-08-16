@@ -1,6 +1,6 @@
-package com.scaletech.hsanalytic.apiservice
+package com.upaxis.apiservice
 
-import com.scaletech.hsanalytic.UpAxisConfig
+import com.upaxis.UpAxisConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

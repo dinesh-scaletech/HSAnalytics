@@ -1,16 +1,17 @@
-package com.scaletech.hsanalytic
+package com.upaxis
 
 import android.content.Context
 import android.os.Build
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
-import com.scaletech.hsanalytic.apiservice.ApiInterface
-import com.scaletech.hsanalytic.apiservice.ApiProvider
-import com.scaletech.hsanalytic.apiservice.UpAxisCallBack
-import com.scaletech.hsanalytic.model.UpAxisResponse
-import com.scaletech.hsanalytic.pref.UpAxisPref
-import com.scaletech.hsanalytic.utils.*
+import com.upaxis.apiservice.ApiInterface
+import com.upaxis.apiservice.ApiProvider
+import com.upaxis.apiservice.UpAxisCallBack
+import com.upaxis.model.UpAxisResponse
+import com.upaxis.pref.UpAxisPref
+import com.upaxis.utils.*
+import com.upaxis.utils.isNetworkAvailable
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response

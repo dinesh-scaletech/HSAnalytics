@@ -1,4 +1,4 @@
-package com.scaletech.hsanalytic.model
+package com.upaxis.model
 
 class UpAxisResponse {
     var responseCode:Int?= 0

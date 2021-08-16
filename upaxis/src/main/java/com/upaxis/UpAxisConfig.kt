@@ -1,14 +1,14 @@
-package com.scaletech.hsanalytic
+package com.upaxis
 
 import android.content.Context
 import android.util.Log
 import com.android.installreferrer.api.InstallReferrerClient
 import com.android.installreferrer.api.InstallReferrerStateListener
 import com.android.installreferrer.api.ReferrerDetails
-import com.scaletech.hsanalytic.apiservice.UpAxisCallBack
-import com.scaletech.hsanalytic.model.UpAxisResponse
-import com.scaletech.hsanalytic.pref.UpAxisPref
-import com.scaletech.hsanalytic.utils.startUserTrackingService
+import com.upaxis.apiservice.UpAxisCallBack
+import com.upaxis.model.UpAxisResponse
+import com.upaxis.pref.UpAxisPref
+import com.upaxis.utils.startUserTrackingService
 
 
 class UpAxisConfig() {

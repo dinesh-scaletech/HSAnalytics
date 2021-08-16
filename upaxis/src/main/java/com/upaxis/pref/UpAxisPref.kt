@@ -1,4 +1,4 @@
-package com.scaletech.hsanalytic.pref
+package com.upaxis.pref
 
 import android.app.Activity
 import android.content.Context
