@@ -37,8 +37,8 @@ class TrackingService : Service() {
     private fun startRepeatingJob(): Job {
         return CoroutineScope(Dispatchers.IO).launch {
             while (NonCancellable.isActive) {
-                updateServer()
                 delay(TRACK_INTERVAL.toLong())
+                updateServer()
             }
         }
     }

@@ -9,7 +9,7 @@ UpAxis SDK is useful for developers to integrate referral tracking events in som
 Always use an updated library version to get stable and more features. Add the Updated library version in your module's Gradle file.
 
 ```
-implementation "io.github.dinesh-scaletech:UpAxis:1.0.4"
+implementation "io.github.dinesh-scaletech:UpAxis:1.0.5"
 ```
 
 ### Set Configuration
@@ -94,7 +94,7 @@ class Class A extends AppCompactActicity{
 1. ***postInstallEvent***
    This is an independent method will be called from SDK itself. this method can not be called from outside of this class for 1.0.0 SDK version.
 
-2. ***postEvent***
+2. ***postEvent*** 
     - Single function to post all kinds of data to the server.
 
    List of parameters:
