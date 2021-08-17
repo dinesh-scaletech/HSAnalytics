@@ -5,14 +5,14 @@ import android.os.Build
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.upaxis.apiservice.ApiInterface
 import com.upaxis.apiservice.ApiProvider
 import com.upaxis.apiservice.UpAxisCallBack
 import com.upaxis.model.UpAxisResponse
 import com.upaxis.pref.UpAxisPref
 import com.upaxis.utils.*
-import com.upaxis.utils.isNetworkAvailable
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
 import java.io.IOException
@@ -35,7 +35,7 @@ class UpAxis(private val context: Context) {
      * @param receive : String. Monitoring value that should assigned to this conversion.
      * value should be in decimal format in string data type.
      * @param queue: Boolean. Either 0 (false) or 1(true), if 1 post backs will be queued and not handled in real time. default is 0
-     * @param extraData:JSONObject. Any additional parameter can pass here in JSONObject.
+     * @param extraData:JsonObject. Any additional parameter can pass here in JsonObject.
      * @param upAxisCallBack Async call back inline function. here we used Void to get response in string.
      * for now are are not care about response from the server. we just need to post event.
      * while development process, we can check error or response data in application.
@@ -43,7 +43,7 @@ class UpAxis(private val context: Context) {
     @JvmSuppressWildcards
     public fun postEvent(
         eventId: String?, transactionId: String ?= null, receive: String? = null,
-        queue: Boolean = false, extraData: JSONObject = JSONObject(), upAxisCallBack: UpAxisCallBack<Void>? = null
+        queue: Boolean = false, extraData: JsonObject = JsonObject(), upAxisCallBack: UpAxisCallBack<Void>? = null
     ) {
         val pair = validateUserData()
         if (!pair.first) {
@@ -67,7 +67,7 @@ class UpAxis(private val context: Context) {
             bodyParams[PARAM_RECEIVE] = it
         }
 
-        bodyParams[PARAM_DETAILS] = getDeviceData(extraData)
+        bodyParams[PARAM_DETAILS] = Gson().toJson(getDeviceData(extraData))
         bodyParams[PARAM_B] = if (queue) 1 else 0
 
         val call = apiInterface?.postEvent(bodyParams)
@@ -105,7 +105,7 @@ class UpAxis(private val context: Context) {
         val apiInterface: ApiInterface? = ApiProvider.createServiceString()
         val bodyParams = HashMap<String, Any>()
         getCommonParameters(bodyParams)
-        bodyParams[PARAM_DETAILS] = getDeviceData(JSONObject())
+        bodyParams[PARAM_DETAILS] = getDeviceData(JsonObject())
         val call = apiInterface?.postEvent(bodyParams)
         call?.enqueue(object : retrofit2.Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -147,7 +147,7 @@ class UpAxis(private val context: Context) {
             bodyParams[PARAM_EVENT_ID] = it
         }
 
-        bodyParams[PARAM_DETAILS] = getDeviceData(JSONObject())
+        bodyParams[PARAM_DETAILS] = getDeviceData(JsonObject())
 
         val call = apiInterface?.postEvent(bodyParams)
         call?.enqueue(object : retrofit2.Callback<Void> {
@@ -188,15 +188,15 @@ class UpAxis(private val context: Context) {
     /**
      * Function to add more data along with user data.
      */
-    private fun getDeviceData(extraData: JSONObject): JSONObject {
-        extraData.put("manufacturer", Build.MANUFACTURER)
-        extraData.put("model", Build.MODEL)
-        extraData.put("platform", "Android")
+    private fun getDeviceData(extraData: JsonObject): JsonObject {
+        extraData.addProperty("manufacturer", Build.MANUFACTURER)
+        extraData.addProperty("model", Build.MODEL)
+        extraData.addProperty("androidOS", Build.VERSION.SDK_INT)
+        extraData.addProperty("platform", "Android")
         if (adIdInfo != null) {
-            extraData.put("advertisementId", adIdInfo?.id)
-            extraData.put("packageName", adIdInfo?.isLimitAdTrackingEnabled)
+            extraData.addProperty("advertisementId", adIdInfo?.id)
         }
-        extraData.put("libVersion", System.getenv("VERSION_NAME"))
+        extraData.addProperty("libVersion", System.getenv("VERSION_NAME"))
         return extraData
     }
 
