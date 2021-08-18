@@ -6,11 +6,12 @@ plugins {
 
 apply from: "${rootDir}/scripts/publish-module.gradle"
 
-
 android {
     compileSdkVersion 30
+
     defaultConfig {
         minSdkVersion 21
+        versionName "1.0.7"
     }
     lintOptions {
         abortOnError false

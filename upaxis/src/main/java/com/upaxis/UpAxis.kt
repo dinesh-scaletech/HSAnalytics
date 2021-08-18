@@ -16,6 +16,11 @@ import com.upaxis.utils.*
 import retrofit2.Call
 import retrofit2.Response
 import java.io.IOException
+import java.util.*
+import kotlin.collections.HashMap
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import java.lang.RuntimeException
 
 
 class UpAxis(private val context: Context) {
@@ -42,7 +47,7 @@ class UpAxis(private val context: Context) {
      */
     @JvmSuppressWildcards
     public fun postEvent(
-        eventId: String?, transactionId: String ?= null, receive: String? = null,
+        eventId: String?, transactionId: String? = null, receive: String? = null,
         queue: Boolean = false, extraData: JsonObject = JsonObject(), upAxisCallBack: UpAxisCallBack<Void>? = null
     ) {
         val pair = validateUserData()
@@ -191,12 +196,16 @@ class UpAxis(private val context: Context) {
     private fun getDeviceData(extraData: JsonObject): JsonObject {
         extraData.addProperty("manufacturer", Build.MANUFACTURER)
         extraData.addProperty("model", Build.MODEL)
-        extraData.addProperty("androidOS", Build.VERSION.SDK_INT)
+        extraData.addProperty("androidOS", Build.VERSION.RELEASE)
         extraData.addProperty("platform", "Android")
         if (adIdInfo != null) {
             extraData.addProperty("advertisementId", adIdInfo?.id)
         }
-        extraData.addProperty("libVersion", System.getenv("VERSION_NAME"))
+        try {
+            val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+            extraData.addProperty("libVersion", packageInfo.versionName)
+        } catch (e: PackageManager.NameNotFoundException) {
+        }
         return extraData
     }
 
