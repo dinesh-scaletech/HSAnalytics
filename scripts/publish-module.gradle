@@ -44,7 +44,7 @@ afterEvaluate {
                 // we'll set up later
                 groupId 'io.github.dinesh-scaletech'
                 artifactId 'UpAxis'
-                version '1.0.7'
+                version "1.0.8"
 
                 // Two artifacts, the `aar` (or `jar`) and the sources
                 if (project.plugins.findPlugin("com.android.library")) {

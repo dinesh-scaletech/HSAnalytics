@@ -9,9 +9,19 @@ apply from: "${rootDir}/scripts/publish-module.gradle"
 android {
     compileSdkVersion 30
 
+    def Properties props = new Properties()
+    def propFile = file("${rootDir}/scripts/publish-module.gradle")
+    def versionCode;
+    if (propFile.canRead()){
+        props.load(new FileInputStream(propFile))
+        if (props!=null && props.containsKey('version')) {
+            versionCode = props['version']
+        }
+    }
+    
     defaultConfig {
         minSdkVersion 21
-        versionName "1.0.7"
+        buildConfigField "String", "SDK_VERSION", versionCode
     }
     lintOptions {
         abortOnError false

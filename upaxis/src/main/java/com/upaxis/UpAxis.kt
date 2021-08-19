@@ -20,6 +20,7 @@ import java.util.*
 import kotlin.collections.HashMap
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import org.json.JSONObject
 import java.lang.RuntimeException
 
 
@@ -40,7 +41,7 @@ class UpAxis(private val context: Context) {
      * @param receive : String. Monitoring value that should assigned to this conversion.
      * value should be in decimal format in string data type.
      * @param queue: Boolean. Either 0 (false) or 1(true), if 1 post backs will be queued and not handled in real time. default is 0
-     * @param extraData:JsonObject. Any additional parameter can pass here in JsonObject.
+     * @param extraData:JSONObject. Any additional parameter can pass here in JSONObject.
      * @param upAxisCallBack Async call back inline function. here we used Void to get response in string.
      * for now are are not care about response from the server. we just need to post event.
      * while development process, we can check error or response data in application.
@@ -48,7 +49,7 @@ class UpAxis(private val context: Context) {
     @JvmSuppressWildcards
     public fun postEvent(
         eventId: String?, transactionId: String? = null, receive: String? = null,
-        queue: Boolean = false, extraData: JsonObject = JsonObject(), upAxisCallBack: UpAxisCallBack<Void>? = null
+        queue: Boolean = false, extraData: JSONObject = JSONObject(), upAxisCallBack: UpAxisCallBack<Void>? = null
     ) {
         val pair = validateUserData()
         if (!pair.first) {
@@ -110,7 +111,7 @@ class UpAxis(private val context: Context) {
         val apiInterface: ApiInterface? = ApiProvider.createServiceString()
         val bodyParams = HashMap<String, Any>()
         getCommonParameters(bodyParams)
-        bodyParams[PARAM_DETAILS] = getDeviceData(JsonObject())
+        bodyParams[PARAM_DETAILS] = getDeviceData(JSONObject())
         val call = apiInterface?.postEvent(bodyParams)
         call?.enqueue(object : retrofit2.Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -152,7 +153,7 @@ class UpAxis(private val context: Context) {
             bodyParams[PARAM_EVENT_ID] = it
         }
 
-        bodyParams[PARAM_DETAILS] = getDeviceData(JsonObject())
+        bodyParams[PARAM_DETAILS] = getDeviceData(JSONObject())
 
         val call = apiInterface?.postEvent(bodyParams)
         call?.enqueue(object : retrofit2.Callback<Void> {
@@ -193,19 +194,20 @@ class UpAxis(private val context: Context) {
     /**
      * Function to add more data along with user data.
      */
-    private fun getDeviceData(extraData: JsonObject): JsonObject {
-        extraData.addProperty("manufacturer", Build.MANUFACTURER)
-        extraData.addProperty("model", Build.MODEL)
-        extraData.addProperty("androidOS", Build.VERSION.RELEASE)
-        extraData.addProperty("platform", "Android")
+    private fun getDeviceData(extraData: JSONObject): JSONObject {
+        extraData.put("manufacturer", Build.MANUFACTURER)
+        extraData.put("model", Build.MODEL)
+        extraData.put("androidOS", Build.VERSION.RELEASE)
+        extraData.put("platform", "Android")
         if (adIdInfo != null) {
-            extraData.addProperty("advertisementId", adIdInfo?.id)
+            extraData.put("advertisementId", adIdInfo?.id)
         }
         try {
             val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-            extraData.addProperty("libVersion", packageInfo.versionName)
+            extraData.put("appPackage", packageInfo.packageName)
         } catch (e: PackageManager.NameNotFoundException) {
         }
+        extraData.put("libVersion", BuildConfig.SDK_VERSION)
         return extraData
     }
 
