@@ -42,9 +42,9 @@ afterEvaluate {
             release(MavenPublication) {
                 // The coordinates of the library, being set from variables that
                 // we'll set up later
-                groupId 'io.github.dinesh-scaletech'
-                artifactId 'UpAxis'
-                version "1.0.8"
+                groupId 'io.github.surfantmedia'
+                artifactId 'UpAxisAndroidSDK'
+                version "1.0.0"
 
                 // Two artifacts, the `aar` (or `jar`) and the sources
                 if (project.plugins.findPlugin("com.android.library")) {
@@ -57,9 +57,9 @@ afterEvaluate {
                 artifact javadocJar
 
                 pom {
-                    name = 'UpAxis'
+                    name = 'UpAxisAndroidSDK'
                     description = 'UpAxis sdk to track user install event in background'
-                    url = 'https ://github.com/dinesh-scaletech/UpAxis-Android/'
+                    url = 'https ://github.com/surfantmedia/UpAxisAndroidSDK/'
                     licenses {
                         license {
                             name = 'The Apache Software License, Version 2.0'
@@ -68,9 +68,9 @@ afterEvaluate {
                     }
                     developers {
                         developer {
-                            id = 'dinesh-scaletech'
-                            name = 'Dinesh Scaletech'
-                            email = 'dinesh@scaletech.xyz'
+                            id = 'surfantmedia'
+                            name = 'Surfant Media'
+                            email = 'm.endress+sfm@hqsoftware.solutions'
                         }
                         // Add all other devs here...
                     }
@@ -78,9 +78,9 @@ afterEvaluate {
                     // Version control info - if you're using GitHub, follow the
                     // format as seen here
                     scm {
-                        connection = 'scm:git@github.com:dinesh-scaletech/UpAxis-Android.git'
-                        developerConnection = 'scm:git@github.com:dinesh-scaletech/UpAxis-Android.git'
-                        url = 'https ://github.com/dinesh-scaletech/UpAxis-Android/'
+                        connection = 'scm:git@github.com:surfantmedia/UpAxisAndroidSDK.git'
+                        developerConnection = 'scm:git@github.com:surfantmedia/UpAxisAndroidSDK.git'
+                        url = 'https ://github.com/surfantmedia/UpAxisAndroidSDK/'
                     }
                 }
             }

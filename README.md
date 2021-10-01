@@ -1,4 +1,4 @@
-# UpAxis
+# UpAxisAndroidSDK
 
 ## SDK Configuration
 
@@ -9,7 +9,7 @@ UpAxis SDK is useful for developers to integrate referral tracking events in som
 Always use an updated library version to get stable and more features. Add the Updated library version in your module's Gradle file.
 
 ```
-implementation "io.github.dinesh-scaletech:UpAxis:1.0.5"
+implementation "io.github.surfantmedia:UpAxisAndroidSDK:1.0.0"
 ```
 
 ### Set Configuration
